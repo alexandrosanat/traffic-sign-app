@@ -35,7 +35,7 @@ def prediction_text():
 
 def load_signal_categories():
     cwd = os.getcwd()
-    categories_path = os.path.join(cwd, "data_included", "signal categories")
+    categories_path = os.path.join(cwd, "data", "signal_categories")
     image_list = []
     for filename in glob.glob(os.path.join(categories_path, "*.png")):
         im = Image.open(filename)
@@ -57,7 +57,7 @@ def main():
 
     # Plot model summary plots
     cwd = os.getcwd()
-    training_plots_path = os.path.join(cwd, 'outputs')
+    training_plots_path = os.path.join(cwd, 'data', 'outputs')
     plots = list()
 
     for i, img_name in enumerate(os.listdir(training_plots_path)):
@@ -106,14 +106,12 @@ def main():
 
     uploaded_image = st.file_uploader(label="", type=["png", "jpg"])
 
-    # Tensorflow GPU settings
-    physical_devices = tf.config.list_physical_devices("GPU")
-    tf.config.experimental.set_memory_growth(physical_devices[0], True)
-
     # Load trained model
-    cwd = os.getcwd()
-    model_path = os.path.join(cwd, "trained_model/lenet_64x64")
-    model = tf.keras.models.load_model(model_path)
+
+    with tf.device("/cpu:0"):
+        cwd = os.getcwd()
+        model_path = os.path.join(cwd, "model/lenet_64.h5")
+        model = tf.keras.models.load_model(model_path)
 
     if uploaded_image is not None:
 
