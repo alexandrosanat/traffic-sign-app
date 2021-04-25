@@ -103,7 +103,7 @@ def main():
 
     st.write("You can try the model by uploading your own photo of a traffic sign below:")
 
-    st.write("NOTE: This model expects pictures of individual signs, so remove or"
+    st.write("NOTE: This model expects pictures of individual signs, so remove or "
              "crop out background items for best results.")
 
     uploaded_image = st.file_uploader(label="", type=["png", "jpg"])
@@ -143,8 +143,8 @@ def main():
 
         correct_mapping = {value: int(key) for key, value in label_mapping.items()}
 
-
         col4.write("The predicted image is:")
+        col4.write("Confidence level: ")
 
         col4.image(category_images.get(correct_mapping.get(prediction[0])))
 
