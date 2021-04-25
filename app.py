@@ -1,10 +1,12 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import tensorflow as tf
 from PIL import Image
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
+
 
 
 def intro():
@@ -36,12 +38,12 @@ def prediction_text():
 def load_signal_categories():
     cwd = os.getcwd()
     categories_path = os.path.join(cwd, "data", "signal_categories")
-    image_list = []
+    image_dict = {}
     for filename in glob.glob(os.path.join(categories_path, "*.png")):
         im = Image.open(filename)
-        image_list.append(im)
+        image_dict[int(os.path.basename(filename).split(".")[0])] = im
 
-    return image_list
+    return image_dict
 
 
 def main():
@@ -110,7 +112,7 @@ def main():
 
     with tf.device("/cpu:0"):
         cwd = os.getcwd()
-        model_path = os.path.join(cwd, "model/lenet_64.h5")
+        model_path = os.path.join(cwd, "model/lenet_cpu64.h5")
         model = tf.keras.models.load_model(model_path)
 
     if uploaded_image is not None:
@@ -132,8 +134,19 @@ def main():
 
         prediction = np.argmax(model.predict(img, steps=1), axis=1)
 
+        label_mapping = {'0': 0, '1': 1, '10': 2, '11': 3, '12': 4, '13': 5, '14': 6, '15': 7,
+                         '16': 8, '17': 9, '18': 10, '19': 11, '2': 12, '20': 13, '21': 14,
+                         '22': 15, '23': 16, '24': 17, '25': 18, '26': 19, '27': 20, '28': 21,
+                         '29': 22, '3': 23, '30': 24, '31': 25, '32': 26, '33': 27, '34': 28,
+                         '35': 29, '36': 30, '37': 31, '38': 32, '39': 33, '4': 34, '40': 35,
+                         '41': 36, '42': 37, '5': 38, '6': 39, '7': 40, '8': 41, '9': 42}
+
+        correct_mapping = {value: int(key) for key, value in label_mapping.items()}
+
+
         col4.write("The predicted image is:")
-        col4.image(category_images[prediction[0]])
+
+        col4.image(category_images.get(correct_mapping.get(prediction[0])))
 
 
 if __name__ == '__main__':
