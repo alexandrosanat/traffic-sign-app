@@ -28,7 +28,7 @@ def intro():
 def sidebar():
     # Sidebars
     st.sidebar.header("About")
-    st.sidebar.text("This is ...")
+    st.sidebar.text("This is an app that uses ML to identify common traffic signs from images uploaded by the user.")
 
 
 def prediction_text():
