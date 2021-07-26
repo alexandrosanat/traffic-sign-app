@@ -1,6 +1,6 @@
 ## Traffic Sign Recognition App deployed in Heroku
 
-The deployed app is live at: 
+The deployed app is live at: https://sign-recognition-app.herokuapp.com/
 
 This app uses a LeNet-5 CNN trained using the German
 Traffic Sign Recognition Benchmark dataset available here:
